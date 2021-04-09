@@ -1,7 +1,8 @@
 library bubble;
 
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 enum BubbleNip { no, leftTop, leftBottom, rightTop, rightBottom }
@@ -38,7 +39,8 @@ class BubbleEdges {
 
   static get zero => BubbleEdges.all(0);
 
-  EdgeInsets get edgeInsets => EdgeInsets.fromLTRB(left ?? 0, top ?? 0, right ?? 0, bottom ?? 0);
+  EdgeInsets get edgeInsets =>
+      EdgeInsets.fromLTRB(left ?? 0, top ?? 0, right ?? 0, bottom ?? 0);
 
   @override
   String toString() => 'BubbleEdges($left, $top, $right, $bottom)';
@@ -98,7 +100,6 @@ class BubbleClipper extends CustomClipper<Path> {
         assert(padding.right != null),
         assert(padding.bottom != null),
         super() {
-
     _startOffset = _endOffset = nipWidth;
 
     var k = nipHeight / nipWidth;
@@ -173,30 +174,33 @@ class BubbleClipper extends CustomClipper<Path> {
 
     switch (nip) {
       case BubbleNip.leftTop:
-        path.addRRect(RRect.fromLTRBR(_startOffset, 0,
-            size.width - _endOffset, size.height, radius));
+        path.addRRect(RRect.fromLTRBR(
+            _startOffset, 0, size.width - _endOffset, size.height, radius));
 
         path.moveTo(_startOffset + radiusX, nipOffset);
         path.lineTo(_startOffset + radiusX, nipOffset + nipHeight);
         path.lineTo(_startOffset, nipOffset + nipHeight);
         if (nipRadius == 0) {
-          path.lineTo(0, nipOffset);
+          path.lineTo(0, nipOffset + nipHeight / 2);
         } else {
           path.lineTo(_nipPX, nipOffset + _nipPY);
-          path.arcToPoint(Offset(_nipCX, nipOffset), radius: Radius.circular(nipRadius));
+          path.arcToPoint(Offset(_nipCX, nipOffset),
+              radius: Radius.circular(nipRadius));
         }
         path.close();
         break;
 
       case BubbleNip.leftBottom:
-        path.addRRect(RRect.fromLTRBR(_startOffset, 0, size.width - _endOffset, size.height, radius));
+        path.addRRect(RRect.fromLTRBR(
+            _startOffset, 0, size.width - _endOffset, size.height, radius));
 
         Path path2 = Path();
         path2.moveTo(_startOffset + radiusX, size.height - nipOffset);
-        path2.lineTo(_startOffset + radiusX, size.height - nipOffset - nipHeight);
+        path2.lineTo(
+            _startOffset + radiusX, size.height - nipOffset - nipHeight);
         path2.lineTo(_startOffset, size.height - nipOffset - nipHeight);
         if (nipRadius == 0) {
-          path2.lineTo(0, size.height - nipOffset);
+          path2.lineTo(0, size.height - nipOffset - nipHeight / 2);
         } else {
           path2.lineTo(_nipPX, size.height - nipOffset - _nipPY);
           path2.arcToPoint(Offset(_nipCX, size.height - nipOffset),
@@ -209,14 +213,16 @@ class BubbleClipper extends CustomClipper<Path> {
         break;
 
       case BubbleNip.rightTop:
-        path.addRRect(RRect.fromLTRBR(_endOffset, 0, size.width - _startOffset, size.height, radius));
+        path.addRRect(RRect.fromLTRBR(
+            _endOffset, 0, size.width - _startOffset, size.height, radius));
 
         Path path2 = Path();
         path2.moveTo(size.width - _startOffset - radiusX, nipOffset);
-        path2.lineTo(size.width - _startOffset - radiusX, nipOffset + nipHeight);
+        path2.lineTo(
+            size.width - _startOffset - radiusX, nipOffset + nipHeight);
         path2.lineTo(size.width - _startOffset, nipOffset + nipHeight);
         if (nipRadius == 0) {
-          path2.lineTo(size.width, nipOffset);
+          path2.lineTo(size.width, nipOffset + nipHeight / 2);
         } else {
           path2.lineTo(size.width - _nipPX, nipOffset + _nipPY);
           path2.arcToPoint(Offset(size.width - _nipCX, nipOffset),
@@ -229,13 +235,17 @@ class BubbleClipper extends CustomClipper<Path> {
         break;
 
       case BubbleNip.rightBottom:
-        path.addRRect(RRect.fromLTRBR(_endOffset, 0, size.width - _startOffset, size.height, radius));
+        path.addRRect(RRect.fromLTRBR(
+            _endOffset, 0, size.width - _startOffset, size.height, radius));
 
-        path.moveTo(size.width - _startOffset - radiusX, size.height - nipOffset);
-        path.lineTo(size.width - _startOffset - radiusX, size.height - nipOffset - nipHeight);
-        path.lineTo(size.width - _startOffset, size.height - nipOffset - nipHeight);
+        path.moveTo(
+            size.width - _startOffset - radiusX, size.height - nipOffset);
+        path.lineTo(size.width - _startOffset - radiusX,
+            size.height - nipOffset - nipHeight);
+        path.lineTo(
+            size.width - _startOffset, size.height - nipOffset - nipHeight);
         if (nipRadius == 0) {
-          path.lineTo(size.width, size.height - nipOffset);
+          path.lineTo(size.width, size.height - nipOffset - nipHeight / 2);
         } else {
           path.lineTo(size.width - _nipPX, size.height - nipOffset - _nipPY);
           path.arcToPoint(Offset(size.width - _nipCX, size.height - nipOffset),
@@ -245,7 +255,8 @@ class BubbleClipper extends CustomClipper<Path> {
         break;
 
       case BubbleNip.no:
-        path.addRRect(RRect.fromLTRBR(_endOffset, 0, size.width - _endOffset, size.height, radius));
+        path.addRRect(RRect.fromLTRBR(
+            _endOffset, 0, size.width - _endOffset, size.height, radius));
         break;
     }
 
@@ -253,7 +264,8 @@ class BubbleClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(BubbleClipper oldClipper) => false;
+  //bool shouldReclip(BubbleClipper oldClipper) => false;
+  bool shouldReclip(BubbleClipper oldClipper) => true;
 }
 
 class Bubble extends StatelessWidget {
